@@ -9,5 +9,4 @@ public class BasicdeckofcardsApplication {
     public static void main(String[] args) {
         SpringApplication.run(BasicdeckofcardsApplication.class, args);
     }
-
 }
