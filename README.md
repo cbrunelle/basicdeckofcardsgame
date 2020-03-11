@@ -6,7 +6,7 @@ The application was developed with the following tools. No tests or explorations
 * Maven 3.6.3
 * IntelliJ IDEA 2019.3.3
 
-## Rationnals
+## Development Overview and Decisions 
 
 My development has been mostly driven by creating a comprehensive testing environment. However, my lack of knowledge of the different tools (Spring, Spring Boot, Maven, Mockito and a few other minor software/library) took me a considerable
 amount of time, and I needed to get up to speed with the Java Language. I did a lot of research before choosing any of these
