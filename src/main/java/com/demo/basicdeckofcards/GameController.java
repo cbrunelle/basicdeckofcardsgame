@@ -113,6 +113,12 @@ public class GameController {
         return output;
     }
 
+    @PutMapping("/games/{gameName}/shoe/shuffle")
+    private void shuffleShoe(@PathVariable String gameName) throws Exception  {
+        Game game = this.gameService.getGameDetails(gameName);
+        game.getShoe().shuffle();
+    }
+
     private Map<String, Object> getPlayerMap(@RequestParam(name = "player") String playerName, Game game) {
         Player player = game.getPlayer(playerName);
         HashMap<String, Object> output = new HashMap<>();

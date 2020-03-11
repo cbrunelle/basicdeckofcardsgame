@@ -4,14 +4,13 @@
 |----------|-------------|---------------------|
 | GET       | /games 
 | POST      | /games
-| GET       | /games/{id}
-| DELETE    | /games/{id}
-| GET       | /games/{id}/players
-| POST      | /games/{id}/players
-| DELETE    | /games/{id}/players/{id}
-| GET       | /games/{id}/deck
-| POST      | /games/{id}/deck
-| GET       | /games/{id}/deck | ?group-by=[suit or card]
-| PUT       | /games/{id}/deck/shuffle
-| PUT       | /games/{id}/deck/deal | ?player={id}
-| GET       | /games/{id}/players/{id}/cards
+| GET       | /games/{name}
+| DELETE    | /games/{name}
+| GET       | /games/{name}/players
+| POST      | /games/{name}/players
+| DELETE    | /games/{name}/players/{name}
+| POST      | /games/{name}/shoe
+| GET       | /games/{name}/shoe                     | ?group-by=[suit or card]
+| PUT       | /games/{name}/shoe/shuffle
+| PUT       | /games/{name}/shoe/deal                | ?player={name}
+| GET       | /games/{name}/players/{name}/cards
