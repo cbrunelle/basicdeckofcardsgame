@@ -7,7 +7,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.mockito.ArgumentMatchers.anyString;
 
 @RunWith(SpringRunner.class)
 class GameServiceTest {
@@ -74,7 +73,7 @@ class GameServiceTest {
     public void getGameDetails_shouldThrowNotFound() {
         assertThatExceptionOfType(GameNotFoundException.class)
                 .isThrownBy(() -> {
-                    gameService.getGameDetails(anyString());
+                    gameService.getGameDetails("NotFound");
                 });
     }
 }

@@ -58,16 +58,6 @@ class BasicDeckOfCardsIntegrationTests {
                 .jsonPath("$.games[?(@.name == 'testDeleteGame')].name").doesNotHaveJsonPath();
     }
 
-    @Test
-    public void canCreateDeck() throws Exception {
-        JSONObject expectedPostResponse = new JSONObject("{ name: 'testCreateDeck', href: '/games/testCreateDeck'}");
-
-        this.webTestClient.post().uri("/decks")
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromValue("{ \"name\": \"testCreateDeck\"}"))
-                .exchange()
-                .expectBody().json(expectedPostResponse.toString());
-    }
 
     @Test
     public void canAddDeckToGame() throws Exception {
@@ -78,7 +68,7 @@ class BasicDeckOfCardsIntegrationTests {
                 .body(BodyInserters.fromValue("{ \"name\": \"testAddDeck\"}"))
                 .exchange();
 
-        this.webTestClient.get().uri("/games/testAddDeck/deck/add").exchange()
+        this.webTestClient.put().uri("/games/testAddDeck/shoe/add").exchange()
                 .expectStatus().isOk();
     }
 
@@ -153,7 +143,7 @@ class BasicDeckOfCardsIntegrationTests {
 
     @Test
     public void canDealCardsToPlayer() throws Exception {
-        JSONObject expected = new JSONObject("{ name : 'joe', cards: [ { suit : 'hearts' , value: 'ACE' } ], total: 1}");
+        JSONObject expected = new JSONObject("{ name : 'joe', cards: [ { suit : 'hearts' , value: 'King' } ], total: 13}");
         this.webTestClient.post().uri("/games")
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromValue("{ \"name\": \"testDealCards\"}"))
@@ -164,9 +154,10 @@ class BasicDeckOfCardsIntegrationTests {
                 .body(BodyInserters.fromValue("{ \"name\": \"joe\"}"))
                 .exchange();
 
-        this.webTestClient.put().uri("/games/testDealCards/deck/deal?player=joe")
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromValue("{ \"name\": \"joe\"}"))
+        this.webTestClient.put().uri("/games/testDealCards/shoe/add").exchange()
+                .expectStatus().isOk();
+
+        this.webTestClient.put().uri("/games/testDealCards/shoe/deal?player=joe")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody().json(expected.toString());

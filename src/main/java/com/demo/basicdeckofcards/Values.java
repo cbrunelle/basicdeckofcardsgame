@@ -38,6 +38,11 @@ public enum Values {
 
     @JsonCreator
     public static Values fromString(String key) {
+        Integer integerValue = Integer.getInteger(key);
+        if (integerValue != null) {
+            return Values.valueOf(integerValue.toString().toUpperCase());
+        }
+
         return key == null
                 ? null
                 : Values.valueOf(key.toUpperCase());

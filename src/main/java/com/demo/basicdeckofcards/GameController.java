@@ -78,7 +78,7 @@ public class GameController {
         return getPlayersMap(game);
     }
 
-    @GetMapping("/games/{gameName}/deck")
+    @GetMapping("/games/{gameName}/shoe")
     private Map<String, Object> getDeck(@PathVariable String gameName, @RequestParam(name = "group-by", required = false, defaultValue = "NONE") GroupByModes mode) throws Exception  {
         Game game = this.gameService.getGameDetails(gameName);
         Shoe shoe = game.getShoe();
@@ -94,14 +94,14 @@ public class GameController {
         return output;
     }
 
-    @PutMapping("/games/{gameName}/deck/deal")
+    @PutMapping("/games/{gameName}/shoe/deal")
     private Map<String, Object> dealToPlayer(@PathVariable String gameName, @RequestParam(name = "player") String playerName) throws Exception  {
         Game game = this.gameService.getGameDetails(gameName);
         game.getShoe().deal(game.getPlayer(playerName), 1);
         return getPlayerMap(playerName, game);
     }
 
-    @PutMapping("/games/{gameName}/deck/add")
+    @PutMapping("/games/{gameName}/shoe/add")
     private Map<String, Object> addDeckToGame(@PathVariable String gameName) throws Exception  {
         Game game = this.gameService.getGameDetails(gameName);
         Shoe shoe = game.getShoe();

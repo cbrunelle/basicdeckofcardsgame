@@ -64,7 +64,7 @@ public class GameControllerTest {
         doAnswer(returnsFirstArg()).when(gameService).create(ArgumentMatchers.any(Game.class));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/games").contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new Game("test1"))))
+                .content("{ \"name\" : \"test1\" }"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("name").value("test1"))
                 .andExpect(jsonPath("href").value("/games/test1"));
@@ -101,8 +101,8 @@ public class GameControllerTest {
         game.addPlayer(new Player("Joe"));
         game.addPlayer(new Player("Amanda"));
         game.getShoe().addDeck(new Deck());
-        game.getShoe().deal(game.getPlayer("Joe"),1);
         game.getShoe().deal(game.getPlayer("Amanda"),1);
+        game.getShoe().deal(game.getPlayer("Joe"),1);
         given(gameService.getGameDetails("testPlayersSorted")).willReturn(game);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/games/testPlayersSorted/players"))
@@ -110,9 +110,9 @@ public class GameControllerTest {
                 .andExpect(jsonPath("$.players").isArray())
                 .andExpect(jsonPath("$.players", hasSize(2)))
                 .andExpect(jsonPath("$.players[0].name").value("Amanda"))
-                .andExpect(jsonPath("$.players[0].total").value("2"))
+                .andExpect(jsonPath("$.players[0].total").value("13"))
                 .andExpect(jsonPath("$.players[1].name").value("Joe"))
-                .andExpect(jsonPath("$.players[1].total").value("1"));
+                .andExpect(jsonPath("$.players[1].total").value("12"));
     }
 
     @Test
@@ -160,7 +160,7 @@ public class GameControllerTest {
         game.getShoe().addDeck(new Deck());
         given(gameService.getGameDetails("testDeck")).willReturn(game);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/games/testDeck/deck"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/games/testDeck/shoe"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.remaining").value(52))
                 .andExpect(jsonPath("$.game").value("testDeck"));
@@ -173,19 +173,19 @@ public class GameControllerTest {
         game.getShoe().addDeck(new Deck());
         given(gameService.getGameDetails("testDeal")).willReturn(game);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/games/testDeal/deck/deal").param("player", "Joe"))
+        mockMvc.perform(MockMvcRequestBuilders.put("/games/testDeal/shoe/deal").param("player", "Joe"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Joe"))
-                .andExpect(jsonPath("$.total").value(1))
+                .andExpect(jsonPath("$.total").value(13))
                 .andExpect(jsonPath("$.cards").isArray())
                 .andExpect(jsonPath("$.cards", hasSize(1)))
-                .andExpect(jsonPath("$.cards[0].suit").value("HEARTS"))
-                .andExpect(jsonPath("$.cards[0].value").value("ACE"));
+                .andExpect(jsonPath("$.cards[0].suit").value("hearts"))
+                .andExpect(jsonPath("$.cards[0].value").value("King"));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/games/testDeal/deck"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/games/testDeal/shoe"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.remaining").value(51))
-                .andExpect(jsonPath("$.game").value("testDeck"));
+                .andExpect(jsonPath("$.game").value("testDeal"));
     }
 
     @Test
@@ -194,7 +194,7 @@ public class GameControllerTest {
         game.getShoe().addDeck(new Deck());
         given(gameService.getGameDetails("testDeck")).willReturn(game);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/games/testDeck/deck").param("group-by", "SUIT"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/games/testDeck/shoe").param("group-by", "SUIT"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.remaining").value(52))
                 .andExpect(jsonPath("$.game").value("testDeck"))
@@ -214,14 +214,18 @@ public class GameControllerTest {
         game.getShoe().addDeck(new Deck());
         given(gameService.getGameDetails("testDeck")).willReturn(game);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/games/testDeck/deck").param("group-by", "CARD"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/games/testDeck/shoe").param("group-by", "CARD"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.remaining").value(52))
                 .andExpect(jsonPath("$.game").value("testDeck"))
                 .andExpect(jsonPath("$.cards.hearts").exists())
                 .andExpect(jsonPath("$.cards.hearts.King").value(1))
+                .andExpect(jsonPath("$.cards.hearts.*", hasSize(13)))
                 .andExpect(jsonPath("$.cards.spades").exists())
+                .andExpect(jsonPath("$.cards.spades.*", hasSize(13)))
                 .andExpect(jsonPath("$.cards.clubs").exists())
-                .andExpect(jsonPath("$.cards.diamonds").exists());
+                .andExpect(jsonPath("$.cards.clubs.*", hasSize(13)))
+                .andExpect(jsonPath("$.cards.diamonds").exists())
+                .andExpect(jsonPath("$.cards.diamonds.*", hasSize(13)));
     }
 }

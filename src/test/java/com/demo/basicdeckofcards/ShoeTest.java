@@ -71,7 +71,7 @@ class ShoeTest {
             shoe.deal(player, 52);
         });
 
-        assertThat(shoe.getCount()).isEqualTo(1);
+        assertThat(shoe.getCount()).isEqualTo(0);
     }
 
     @Test
