@@ -1,4 +1,4 @@
-# basicdeckofcardsgame
+# Basic Deck of Cards Game
 
 ## Requirements 
 The application was developed with the following tools. No tests or explorations were done to validate other software versions.
